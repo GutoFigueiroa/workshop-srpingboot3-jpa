@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import FernandoFigueiroa.course.entites.User;
 import FernandoFigueiroa.course.services.UserService;
+import FernandoFigueiroa.course.services.exceptions.ResourceNotFoundException;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -46,8 +47,13 @@ public class UserResource {
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
+		try {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
+		}catch (ResourceNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+		
 	}
 	
 	@PutMapping(value = "/{id}")
